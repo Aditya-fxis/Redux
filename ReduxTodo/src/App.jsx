@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo, deleteTodo, updateTodo } from "./feature/todoSlice.jsx";
+import { addTodo, deleteTodo, updateTodo, toggleTodo } from "./feature/todoSlice.jsx";
+
 const App = () => {
   const [input, setInput] = useState("");
   const [isEditing, setIsEditing] = useState(null);
   const [editInput, setEditInput] = useState("");
   const todoslist = useSelector((state) => state.todo.todos);
-  // console.log(state)
+
+  const dispatch = useDispatch();
+
+
+  
   const handleAddTodo = () => {
     if (input.trim()) {
       dispatch(addTodo(input));
@@ -29,63 +34,118 @@ const App = () => {
     }
   };
 
-  const dispatch = useDispatch();
+  const handleToggleTodo = (id) => {
+    dispatch(toggleTodo(id));
+  };
 
+useEffect(() => {
+  const storedTodos = JSON.parse(localStorage.getItem("todos"));
+  if (storedTodos && storedTodos.length > 0) {
+    storedTodos.forEach(todo => {
+      dispatch(addTodo(todo.text));  
+    });
+  }
+}, [dispatch]);
+
+useEffect(() => {
+  localStorage.setItem("todos", JSON.stringify(todoslist));
+}, [todoslist]);
+
+  
   return (
     <div className="container">
       <div className="insidecon">
         <h1>Todo App</h1>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Add a new todo"
-          style={{ padding: "10px", width: "300px", marginRight: "10px" }}
-        />
-        <button
-          className="btn"
-          onClick={handleAddTodo}
-          style={{ padding: "10px 16px" }}
-        >
-          Add
-        </button>
+        <div className="add">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Add a new todo"
+            style={{ padding: "10px", width: "300px", marginRight: "10px" }}
+          />
+          <button
+            className="btn"
+            onClick={handleAddTodo}
+            style={{ padding: "10px 16px" }}
+          >
+            Add
+          </button>
+        </div>
         <ul>
           {todoslist.map((todo) => (
-            <li key={todo.id}>
+            <li
+              key={todo.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
+             
               {isEditing === todo.id ? (
                 <>
                   <input
                     type="text"
                     value={editInput}
                     onChange={(e) => setEditInput(e.target.value)}
-                    placeholder="Add a new todo"
                     style={{
                       width: "300px",
                       marginRight: "10px",
-                      backgroundColor:"transparent",
+                      backgroundColor: "transparent",
                       border: "none",
                       outline: "none",
-                      borderRadius: "none",
-                  
                     }}
                   />
-                 <div>
-                 <button
-                    className="btn1 delete"
-                    onClick={() => handleUpdateTodo(todo.id)}
-                    style={{
-                      marginRight: "10px"
-                    }}>
-                    ✅
-                  </button>
-                  <button className="btn1 delete" onClick={() => setIsEditing(null)}>
-                  ❎
-                  </button>
-                 </div>
+                  <div>
+                    <button
+                      className="btn1 delete"
+                      onClick={() => handleUpdateTodo(todo.id)}
+                      style={{
+                        marginRight: "10px",
+                        width: "20px", 
+                        height: "20px", 
+                        cursor: "pointer",
+                      }}
+                    >
+                      ✅
+                    </button>
+                    <button
+                      className="btn1 delete"
+                      onClick={() => setIsEditing(null)}
+                      style={{
+                        marginRight: "10px",
+                        width: "20px", 
+                        height: "20px", 
+                        cursor: "pointer",
+                      }}
+                    >
+                      ❎
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
-                  <span>{todo.text}</span>
+                <div className="check">
+                <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => handleToggleTodo(todo.id)}
+                style={{
+                  marginRight: "10px",
+                  width: "20px", 
+                  height: "20px", 
+                  cursor: "pointer",
+                }}
+              />
+                  <span
+                    style={{
+                      textDecoration: todo.completed ? "line-through" : "none",
+                    }}
+                  >
+                    {todo.text}
+                  </span>
+                </div>
                   <div>
                     <button
                       className="delete"

@@ -23,12 +23,19 @@ export const todoSlice = createSlice({
         todo.text = newText;
       }
       },
+      toggleTodo: (state, action) => {
+        const todo = state.todos.find((todo) => todo.id === action.payload);
+        if (todo) {
+          todo.completed = !todo.completed;
+        }
+      },
+      
     incrementByAmount: (state, action) => {
       state.value += action.payload
     },
   },
 })
 
-export const { addTodo, deleteTodo, updateTodo, incrementByAmount } = todoSlice.actions
+export const { addTodo, deleteTodo, updateTodo, toggleTodo, incrementByAmount } = todoSlice.actions
 
 export default todoSlice.reducer
