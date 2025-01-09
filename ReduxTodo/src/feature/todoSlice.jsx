@@ -10,11 +10,18 @@ export const todoSlice = createSlice({
   reducers: {
     addTodo: (state, action) => {
         // state.push({ id: nanoid(), text: action.payload, completed: false });
-        const todo = { id: nanoid(), text: action.payload, completed: false }
+        const todo = { id: nanoid(), text: action.payload }
         state.todos.push(todo)
       },
     deleteTodo: (state, action) => {
        state.todos= state.todos.filter((todo)=>todo.id!==action.payload)
+      },
+    updateTodo: (state, action) => {
+      const { id, newText } = action.payload;
+      const todo = state.todos.find((todo) => todo.id === id);
+      if (todo) {
+        todo.text = newText;
+      }
       },
     incrementByAmount: (state, action) => {
       state.value += action.payload
@@ -22,6 +29,6 @@ export const todoSlice = createSlice({
   },
 })
 
-export const { addTodo, deleteTodo, incrementByAmount } = todoSlice.actions
+export const { addTodo, deleteTodo, updateTodo, incrementByAmount } = todoSlice.actions
 
 export default todoSlice.reducer
