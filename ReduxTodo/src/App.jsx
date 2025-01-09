@@ -2,10 +2,10 @@ import React from "react";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "./feature/todoSlice.jsx";
+import { addTodo, deleteTodo } from "./feature/todoSlice.jsx";
 const App = () => {
   const [input, setInput] = useState("");
-  const todos = useSelector((state) => state.todo);
+  const todoslist = useSelector((state) => state.todo.todos);
   // console.log(state)
   const handleAddTodo = () => {
     if (input.trim()) {
@@ -16,21 +16,41 @@ const App = () => {
   const dispatch = useDispatch();
   return (
     <div className="container">
-      <div>
+      <div className="insidecon">
         <h1>Todo App</h1>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add a new todo"
-          style={{ padding: "8px", width: "200px", marginRight: "10px" }}
+          style={{ padding: "10px", width: "300px", marginRight: "10px" }}
         />
-        <button onClick={handleAddTodo} style={{ padding: "8px 12px" }}>
+        <button
+          className="btn"
+          onClick={handleAddTodo}
+          style={{ padding: "10px 16px" }}
+        >
           Add
         </button>
         <ul>
-          {todos.map((todo) => (
-            <li key={todo.id}>{todo.text}</li>
+          {todoslist.map((todo) => (
+            <li key={todo.id}>
+              {todo.text}
+              <div>
+                <button
+                  className="delete"
+                  onClick={() => dispatch(updateTodo(todo.id))}
+                >
+                  ✏️
+                </button>
+                <button
+                  className="delete"
+                  onClick={() => dispatch(deleteTodo(todo.id))}
+                >
+                  ❌
+                </button>
+              </div>
+            </li>
           ))}
         </ul>
       </div>
