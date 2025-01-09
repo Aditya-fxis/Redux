@@ -56,3 +56,24 @@ button:focus-visible {
   justify-content: center;
   height: 100vh; 
 }
+.rcontainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.abtn {
+  font-size: small;
+}
+.text {
+  padding: 30px;
+}
+
+.input {
+  padding: 6px;
+  border-radius: 4px;
+}
