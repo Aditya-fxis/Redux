@@ -14,7 +14,8 @@ const App = () => {
 
 
   
-  const handleAddTodo = () => {
+  const handleAddTodo = (e) => {
+    e.preventDefault();
     if (input.trim()) {
       dispatch(addTodo(input));
       setInput("");
