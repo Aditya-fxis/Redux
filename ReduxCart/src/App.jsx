@@ -33,7 +33,7 @@ const App = () => {
             <strong>{item.name}</strong> - ${item.price}
             <button
               onClick={() => dispatch(addCart(item))}
-              style={{ marginLeft: "10px" }}
+              style={{ marginLeft: "10px", cursor:'pointer' }}
             >
               Add to Cart
             </button>
