@@ -33,20 +33,26 @@ export const todoSlice = createSlice({
       }
     },
     registerUser: (state, action) => {
-      // console.log("Payload:", action.payload); // Log payload
-      // console.log("Before State:", state.users); // Log state before update
       const { name, email, password } = action.payload;
-
-      const existingUser = state.users.find((user) => user.email === email);
-      // const loginUser = state.users.find((user) => user.email === email && user.password === password);
-      
+    
+      let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+      if (!Array.isArray(storedUsers)) {
+        storedUsers = [];
+      }
+    
+      const existingUser = storedUsers.find((user) => user.email === email);
       if (existingUser) {
         throw new Error("Email already registered!");
       }
+    
       const user = { id: nanoid(), name, email, password };
+    
       state.users.push(user);
-      localStorage.setItem('users', JSON.stringify(user));
+      storedUsers.push(user);
+      localStorage.setItem("users", JSON.stringify(storedUsers)); 
+      // localStorage.setItem('loggedInUser', JSON.stringify(user));
     },
+    
     setLoggedInUser: (state, action) => {
       state.loggedInUser = action.payload;
     },

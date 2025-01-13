@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { setLoggedInUser } from './feature/todoSlice'
 
 const Login = () => {
-  const users = useSelector((state) => {
-    // console.log("Redux State:", state);
-    return state.todo.users;
-  });
-  
+  // const users = useSelector((state) => {
+  //   // console.log("Redux State:", state);
+  //   return state.todo.users;
+  // });
+  const users = JSON.parse(localStorage.getItem("users"))
   const dispatch = useDispatch();
   // console.log("user", users);
   const navigate = useNavigate();
